@@ -1,0 +1,21 @@
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies
+RUN npm ci --only=production
+
+# Copy mock API server
+COPY mocks/ ./mocks/
+
+# Expose port
+EXPOSE 3001
+
+# Set environment variable for the mock API URL
+ENV MOCK_API_URL=http://0.0.0.0:3001
+
+# Start the mock API server
+CMD ["node", "mocks/server.mjs"]

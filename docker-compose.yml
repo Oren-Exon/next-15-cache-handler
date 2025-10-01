@@ -9,6 +9,24 @@ services:
     networks:
       - app-network
 
+  mock-api:
+    build:
+      context: .
+      dockerfile: Dockerfile-mock-api
+    ports:
+      - "3001:3001"
+    environment:
+      - MOCK_API_URL=http://0.0.0.0:3001
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    networks:
+      - app-network
+
   nextjs-app:
     build:
       context: .
@@ -21,6 +39,7 @@ services:
       - REDIS_URL=redis://redis-stack:6379
       - REDIS_SINGLE_CONNECTION=true
       - NEXT_PRIVATE_DEBUG_CACHE=true
+      - MOCK_API_URL=http://mock-api:3001
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000"]
