@@ -1,12 +1,17 @@
+// @ts-check
+
 import { createClient } from "redis";
 import { PHASE_PRODUCTION_BUILD } from "next/constants.js";
 import { CacheHandler } from "@fortedigital/nextjs-cache-handler";
 import createRedisHandler from "@fortedigital/nextjs-cache-handler/redis-strings";
 
 async function setupRedisClient() {
+  /** @type {ReturnType<typeof createClient> | null} */
+  let redisClient = null;
+  
   if (PHASE_PRODUCTION_BUILD !== process.env.NEXT_PHASE) {
     try {
-      const redisClient = createClient({
+      redisClient = createClient({
         url: process.env.REDIS_URL,
         pingInterval: 10000,
       });
