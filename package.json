@@ -3,12 +3,37 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "wireit",
     "build": "next build --turbopack",
     "lint": "eslint",
     "start": "docker-compose up --build",
-    "mock-api:start": "MOCK_API_URL=http://localhost:3001 node mocks/server.mjs",
+    "api-mocks": "wireit",
     "typecheck": "tsc --noEmit"
+  },
+  "wireit": {
+    "api-mocks": {
+      "command": "node mocks/server.mjs",
+      "service": true,
+      "env": {
+        "MOCK_API_URL": {
+          "external": true,
+          "default": "http://localhost:3001"
+        }
+      }
+    },
+    "dev": {
+      "command": "next dev --turbopack",
+      "service": true,
+      "dependencies": [
+        "api-mocks"
+      ],
+      "env": {
+        "MOCK_API_URL": {
+          "external": true,
+          "default": "http://localhost:3001"
+        }
+      }
+    }
   },
   "dependencies": {
     "@fortedigital/nextjs-cache-handler": "^2.0.2",
@@ -28,6 +53,7 @@
     "eslint": "^9",
     "eslint-config-next": "15.5.4",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "wireit": "^0.14.12"
   }
 }
