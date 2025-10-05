@@ -3,8 +3,6 @@ import { PHASE_PRODUCTION_BUILD } from "next/constants.js";
 import { CacheHandler } from "@fortedigital/nextjs-cache-handler";
 import createRedisHandler from "@fortedigital/nextjs-cache-handler/redis-strings";
 
-const isSingleConnectionModeEnabled = Boolean(process.env.REDIS_SINGLE_CONNECTION);
-
 async function setupRedisClient() {
   if (PHASE_PRODUCTION_BUILD !== process.env.NEXT_PHASE) {
     try {
@@ -16,10 +14,6 @@ async function setupRedisClient() {
       redisClient.on("error", (e) => {
         if (process.env.NEXT_PRIVATE_DEBUG_CACHE !== undefined) {
           console.warn("[CacheHandler] Redis error", e);
-        }
-        if (isSingleConnectionModeEnabled) {
-          global.cacheHandlerConfig = null;
-          global.cacheHandlerConfigPromise = null;
         }
       });
 
@@ -67,20 +61,11 @@ async function createCacheConfig() {
     handlers: [redisCacheHandler],
   };
 
-  if (isSingleConnectionModeEnabled) {
-    global.cacheHandlerConfigPromise = null;
-    global.cacheHandlerConfig = config;
-  }
-
   return config;
 }
 
 CacheHandler.onCreation(() => {
-  const promise = createCacheConfig();
-  if (isSingleConnectionModeEnabled) {
-    global.cacheHandlerConfigPromise = promise;
-  }
-  return promise;
+  return createCacheConfig();
 });
 
 export default CacheHandler;

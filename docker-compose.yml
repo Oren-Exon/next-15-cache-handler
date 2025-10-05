@@ -37,7 +37,6 @@ services:
       - NODE_ENV=production
       - NEXT_TELEMETRY_DISABLED=1
       - REDIS_URL=redis://redis-stack:6379
-      - REDIS_SINGLE_CONNECTION=true
       - NEXT_PRIVATE_DEBUG_CACHE=true
       - MOCK_API_URL=http://mock-api:3001
     restart: unless-stopped
