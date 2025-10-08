@@ -1,36 +1,32 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# self-hosted next-15 with redis cache (no CDN for pages)
 
-## Getting Started
+This project demos latest next application with redis caching-layer.
 
-First, run the development server:
+## Requirements
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- nodejs v18 or higher
+- docker (only required for `npm start` command)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Available scripts
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- `npm run dev` - Start development server with mock API
+- `npm run build` - Build the application for production
+- `npm run start` - Build and Start production server using Docker Compose
+- `npm run lint` - Run ESLint to check code quality
+- `npm run typecheck` - Run TypeScript type checking
+- `npm run api-mocks` - Start mock API server
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Available Routes
 
-## Learn More
+### Pages
+- `/` - Home page with Next.js welcome content
+- `/count/[keyword]` - Dynamic route that fetches count data for a given keyword (revalidates every 500 seconds)
+- `/lpvs/[lpv]/verticals/best/search/[keyword]` - Nested dynamic route for search functionality (revalidates every 120 seconds)
+  - Note: Only works when `lpv` parameter equals "10000"
 
-To learn more about Next.js, take a look at the following resources:
+### API Routes
+- `POST /api/revalidate?path=<path>` - Revalidates a specific path in the cache
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+See https://nextjs.org/docs/app/guides/self-hosting
