@@ -36,7 +36,7 @@
     }
   },
   "dependencies": {
-    "@fortedigital/nextjs-cache-handler": "^2.0.2",
+    "@fortedigital/nextjs-cache-handler": "2.1.0",
     "express": "^5.1.0",
     "morgan": "^1.10.1",
     "next": "15.5.4",

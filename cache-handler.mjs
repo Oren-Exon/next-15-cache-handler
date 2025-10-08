@@ -6,7 +6,7 @@ import { CacheHandler } from "@fortedigital/nextjs-cache-handler";
 import createRedisHandler from "@fortedigital/nextjs-cache-handler/redis-strings";
 
 async function setupRedisClient() {
-  /** @type {ReturnType<typeof createClient> | null} */
+  /** @type {import("redis").RedisClientType | null} */
   let redisClient = null;
   
   if (PHASE_PRODUCTION_BUILD !== process.env.NEXT_PHASE) {
