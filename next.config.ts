@@ -6,7 +6,7 @@ const nextConfig: NextConfig = () =>
       /* config options here */
       output: "standalone",
       cacheHandler: process.env.NODE_ENV === "production" ? "./cache-handler.mjs" : undefined,
-      cacheMaxMemorySize: 0, // disable default in-memory caching
+      cacheMaxMemorySize: process.env.NODE_ENV === "production" ? 0 : undefined, // disable default in-memory caching
     };
   } 
 
