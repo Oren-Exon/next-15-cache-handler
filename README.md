@@ -5,6 +5,7 @@ This project demos latest next application with redis caching-layer.
 More info:
 - https://nextjs.org/docs/app/guides/self-hosting
 - https://github.com/fortedigital/nextjs-cache-handler
+- middleware rewrite not cached - https://github.com/vercel/next.js/issues/83358
 
 ## Requirements
 
@@ -47,10 +48,14 @@ Configured in `middleware.ts`:
 
 - `/search/:path*` → `/lpvs/10000/verticals/best/search/:path*`
   - Example: `/search/tv` → `/lpvs/10000/verticals/best/search/tv`
-  - This rewrite **DOES NOT** work well with caching (skips caching entirely)
+  - This rewrite works well with caching (uses the internal route cache)
 
 ### Testing Rewrites
 
 You can test the rewrite functionality by visiting:
-- `http://localhost:3000/search/tv` (middleware rewrite) - cache does not work (seems that it skips caching entirely - no `x-nextjs-cache` header)
-- `http://localhost:3000/foo/tv` (config rewrite) - cache does work (the cache is on the internal page route as expected)
+- `http://localhost:3000/search/tv` (middleware rewrite) - cache works
+- `http://localhost:3000/foo/tv` (config rewrite) - cache works
+
+## Issues
+
+Revalidate does not work
