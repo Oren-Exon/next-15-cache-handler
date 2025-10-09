@@ -2,6 +2,10 @@
 
 This project demos latest next application with redis caching-layer.
 
+More info:
+- https://nextjs.org/docs/app/guides/self-hosting
+- https://github.com/fortedigital/nextjs-cache-handler
+
 ## Requirements
 
 - nodejs v18 or higher
@@ -27,6 +31,26 @@ This project demos latest next application with redis caching-layer.
 ### API Routes
 - `POST /api/revalidate?path=<path>` - Revalidates a specific path in the cache
 
+## Rewrite Routes
 
+This application uses two types of URL rewrites to provide clean, SEO-friendly URLs while maintaining the underlying route structure:
 
-See https://nextjs.org/docs/app/guides/self-hosting
+### Next.js Config Rewrites
+Configured in `next.config.ts`:
+
+- `/foo/:path*` → `/lpvs/10000/verticals/best/search/:path*`
+  - Example: `/foo/tv` → `/lpvs/10000/verticals/best/search/tv`
+  - This rewrite works well with caching (uses the internal route cache)
+
+### Middleware Rewrites
+Configured in `middleware.ts`:
+
+- `/search/:path*` → `/lpvs/10000/verticals/best/search/:path*`
+  - Example: `/search/tv` → `/lpvs/10000/verticals/best/search/tv`
+  - This rewrite **DOES NOT** work well with caching (skips caching entirely)
+
+### Testing Rewrites
+
+You can test the rewrite functionality by visiting:
+- `http://localhost:3000/search/tv` (middleware rewrite) - cache does not work (seems that it skips caching entirely - no `x-nextjs-cache` header)
+- `http://localhost:3000/foo/tv` (config rewrite) - cache does work (the cache is on the internal page route as expected)
