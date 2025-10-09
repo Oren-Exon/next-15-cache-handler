@@ -1,5 +1,6 @@
 import type { NextConfig } from "next";
 
+// @ts-expect-error NextConfig is not typed
 const nextConfig: NextConfig = () =>
   {
     return  {
